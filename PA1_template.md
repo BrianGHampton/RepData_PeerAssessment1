@@ -12,7 +12,9 @@ output:
 Load the necessary r packages:
 
 ```r
+library(knitr)
 knitr::opts_chunk$set(dev = "png")
+opts_knit$set(base.dir = 'figure')
 library(tidyverse)
 ```
 
