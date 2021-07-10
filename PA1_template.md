@@ -1,12 +1,11 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
+author: "Brian Hampton"
+date: "10 July 2021"
 output: 
-    html_document:
-        keep_md: true
+    html_document: 
+      keep_md: yes
 ---
-*Brian Hampton*
-
-*July 2021*
 
 ## Loading and preprocessing the data
 Load the necessary r packages:
@@ -14,7 +13,6 @@ Load the necessary r packages:
 ```r
 library(knitr)
 knitr::opts_chunk$set(dev = "png")
-opts_knit$set(base.dir = 'figure')
 library(tidyverse)
 ```
 
@@ -114,7 +112,7 @@ ggplot(Total_Steps_per_Day, aes(x = Total_Steps)) +
              x = "Total Steps per Day")
 ```
 
-![](PA1_template_files/figure-html/Histogram of daily steps-1.png)<!-- -->
+![](PA1_template_files/figure-html/Histogram_of_daily_steps-1.png)<!-- -->
 
 ### 2. Calculate and report the **mean** and **median** steps taken per day:
 
@@ -171,7 +169,7 @@ with(data = Average_Steps_Interval,
        })
 ```
 
-![](PA1_template_files/figure-html/Interval Average-1.png)<!-- -->
+![](PA1_template_files/figure-html/Interval_Average-1.png)<!-- -->
 
 ### 2. Which 5-minute interval, on average across all the days in the dataset, 
 ### contains the maximum number of steps?
@@ -265,7 +263,7 @@ ggplot(Total_Steps_with_Subs, aes(x = Total_Steps)) +
        x = "Total Steps per Day (with Missing Data Substituted)")
 ```
 
-![](PA1_template_files/figure-html/Histogram with substituted values-1.png)<!-- -->
+![](PA1_template_files/figure-html/Histogram_with_substituted_values-1.png)<!-- -->
 
 ```r
 Mean_Steps_Subs <- format(mean(Total_Steps_with_Subs$Total_Steps),
@@ -313,7 +311,7 @@ Steps_TypeDay %>%
   labs(x = "5-min Interval Time of Day", y = "Average Steps per 5-min Interval")
 ```
 
-![](PA1_template_files/figure-html/Steps by Day Type-1.png)<!-- -->
+![](PA1_template_files/figure-html/Steps_by_Day_Type-1.png)<!-- -->
 
 The plots indicate that the test subjects were more active (step-wise) early in the day on weekdays (perhaps while going to work or school), while on weekends their overall steps per 5-minute interval was more evenly distributed throughout the day. 
                 

@@ -1,19 +1,17 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
+author: "Brian Hampton"
+date: "10 July 2021"
 output: 
-    html_document:
-        keep_md: true
+    html_document: 
+      keep_md: yes
 ---
-*Brian Hampton*
-
-*July 2021*
 
 ## Loading and preprocessing the data
 Load the necessary r packages:
 ```{r setup}
 library(knitr)
 knitr::opts_chunk$set(dev = "png")
-opts_knit$set(base.dir = 'figure')
 library(tidyverse)
 library(lubridate)
 library(ggplot2)
@@ -42,7 +40,7 @@ df <- rbind(t1, t3)
 ### 1. Make a histogram of the total number of steps taken each day.
 
 Determine the total steps taken each day:
-```{r Total daily steps}
+```{r Total_daily_steps}
 Total_Steps_per_Day <- df %>%
         filter(!is.na(steps)) %>%
         group_by(date) %>%
@@ -50,7 +48,7 @@ Total_Steps_per_Day <- df %>%
         print
 ```
 Create a histogram from the results in the previous step:
-```{r Histogram of daily steps}
+```{r Histogram_of_daily_steps}
 ggplot(Total_Steps_per_Day, aes(x = Total_Steps)) + 
         geom_histogram(binwidth = 1000, color = "black", fill = "orange") +
         scale_y_continuous(name = "Number of Days", breaks = seq(0, 10, 2), 
@@ -60,7 +58,7 @@ ggplot(Total_Steps_per_Day, aes(x = Total_Steps)) +
 ```
 
 ### 2. Calculate and report the **mean** and **median** steps taken per day:
-```{r Mean and Median daily steps}
+```{r Mean_and_Median_daily_steps}
 Mean_Steps <- format(mean(Total_Steps_per_Day$Total_Steps, na.rm = TRUE),
                      big.mark = ",", scientific = FALSE) 
                    
@@ -75,7 +73,7 @@ The median is **`r Median_Steps`** steps taken per day.
 ### 1. Make a time series plot of the 5-minute interval and the average number of 
 ### steps taken, averaged across all days:
 
-```{r Interval Average}
+```{r Interval_Average}
 Average_Steps_Interval <- df %>%
         filter(!is.na(steps)) %>%
         group_by(time) %>%
@@ -96,12 +94,12 @@ with(data = Average_Steps_Interval,
 
 ### 2. Which 5-minute interval, on average across all the days in the dataset, 
 ### contains the maximum number of steps?
-```{r Max Interval}
+```{r Max_Interval}
 Average_Steps_Interval %>% slice_max(Average_Steps)
 ```
 ## Imputing missing values
 ### 1. Caclulate and report the total number of missing values in the dataset
-```{r Missing values}
+```{r Missing_values}
 Rows_with_NAs <- format(nrow(subset(df, is.na(df$steps))),big.mark = ",", scientific = FALSE) 
 ```
 There are **`r Rows_with_NAs`** missing values in the dataset.
@@ -109,7 +107,7 @@ There are **`r Rows_with_NAs`** missing values in the dataset.
 ### 2. Devis a strategy for filling in all of the missing values in the dataset.
 To replace the missing values with their respective average steps per interval, subset the missing values from the working dataframe, and merge it with the average
 steps per interval:
-```{r Fill missing values in working dataframe}
+```{r Fill_missing_values_in_working_dataframe}
 df_of_NAs <- subset(df, is.na(df$steps))
 df_sub_NAs  <- df_of_NAs[, 2:4]
 Sub_Values <- merge(df_sub_NAs, Average_Steps_Interval)
@@ -119,24 +117,24 @@ Sub_Values <- Sub_Values[, c(4, 2, 3, 1)]
 ### 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
 Subset the complete cases (observations with no missing values) from the working
 dataframe:
-```{r Complete cases in working dataframe}
+```{r Complete_cases_in_working_dataframe}
 df_no_NAs <- df[complete.cases(df),]
 ```
 Combine the substituted interval values with the complete cases dataframe:
-```{r }
+```{r Dataframe_with_Substituted_Values}
 df_with_Subs <- rbind(Sub_Values, df_no_NAs)
 head(df_with_Subs)
 ```
 ### 4. Make a histogram of the new dataset with the substituted values, report the **mean** and **median** total number of steps taken per day.
 Calculate the total daily steps with the substituted values:
-```{r New total daily steps}
+```{r New_total_daily_steps}
 Total_Steps_with_Subs <- df_with_Subs %>%
   group_by(date) %>%
   summarize(Total_Steps = sum(steps))%>%
   print
 ```
 Generate a histogram with the substituted values:
-```{r Histogram with substituted values}
+```{r Histogram_with_substituted_values}
 ggplot(Total_Steps_with_Subs, aes(x = Total_Steps)) + 
   geom_histogram(binwidth = 1000, color = "black", fill = "orange") +
   scale_y_continuous(name = "Number of Days", breaks = seq(0, 16, 4), 
@@ -144,7 +142,7 @@ ggplot(Total_Steps_with_Subs, aes(x = Total_Steps)) +
   labs(title = "Histogram of Steps per Day with NAs Substituted", 
        x = "Total Steps per Day (with Missing Data Substituted)")
 ```
-```{r Mean and Median with substituted values}
+```{r Mean_and_Median_with_substituted_values}
 Mean_Steps_Subs <- format(mean(Total_Steps_with_Subs$Total_Steps),
                   big.mark = ",", scientific = FALSE) 
 Median_Steps_Subs <- format(median(Total_Steps_with_Subs$Total_Steps),
@@ -158,7 +156,7 @@ Replacing the missing values with the average steps per their respective time in
 ## Are there diffferences in activity patterns between weekdays and weekends?
 
 ### 1. Create a new factor variable in the dataset with two levels
-```{r Type of Day}
+```{r Type_of_Day}
 df_with_Subs$TypeDay <- ifelse(weekdays(as.Date(df_with_Subs$date)) == "Saturday" |
                              weekdays(as.Date(df_with_Subs$date)) == "Sunday",
                                               "weekend", "weekday")
@@ -168,7 +166,7 @@ names(Steps_TypeDay) <- c("time", "TypeDay", "mean_steps")
 head(Steps_TypeDay)
 ```
 Using ggplot for a line plot with time as the x-axis, mutate the time variable so that the output is as expected:
-```{r Steps by Day Type}
+```{r Steps_by_Day_Type}
 Steps_TypeDay %>%
   mutate(time = as.POSIXct(hms::parse_hm(time))) %>%
   ggplot(aes(time, mean_steps)) +
