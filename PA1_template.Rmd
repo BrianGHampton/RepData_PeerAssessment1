@@ -11,7 +11,7 @@ output:
 ## Loading and preprocessing the data
 Load the necessary r packages:
 ```{r setup}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(dev = "png")
 library(tidyverse)
 library(lubridate)
 library(ggplot2)

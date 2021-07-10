@@ -12,7 +12,7 @@ output:
 Load the necessary r packages:
 
 ```r
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(dev = "png")
 library(tidyverse)
 ```
 
